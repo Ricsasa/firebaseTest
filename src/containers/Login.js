@@ -14,7 +14,9 @@ const base = Rebase.createClass({
 class Login extends React.Component {
 
   constructor(){
-    super();
+    super();        
+    var unsuscribe = base.onAuth(this.authDataCallBack.bind(this));
+    unsuscribe();
     this.state = {
       isAuth: false,
       authUserId: "",
@@ -32,11 +34,7 @@ class Login extends React.Component {
   }
 
   handleLogin(e){
-    //base.authWithOAuthPopup('facebook', this.authHandler.bind(this));
     base.authWithOAuthPopup('facebook', this.authHandler.bind(this));
-    
-    var unsuscribe = base.onAuth(this.authDataCallBack.bind(this));
-    unsuscribe();
   }
 
   handleLogout(e){
@@ -46,11 +44,7 @@ class Login extends React.Component {
   }
 
   authDataCallBack(user){
-    if(user){
-      console.log("User " + user.uid + " is logged in with " + user.providerId);
-    } else {
-      console.log("User is logged out");
-    }
+    return user ? true : false;
   }
 
   render(){
