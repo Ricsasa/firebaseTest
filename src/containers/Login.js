@@ -4,23 +4,10 @@ import ReactRouter from 'react-router';
 
 import Rebase from 're-base';
 
-const base = Rebase.createClass({
-    apiKey: "AIzaSyAlZ73daEohcIL5ONW9_PlCNhK2syqf-Nw",
-    authDomain: "logintest-6a46c.firebaseapp.com",
-    databaseURL: "https://logintest-6a46c.firebaseio.com/",
-    //storageBucket: "qwales1-test.appspot.com",
-});
-
 class Login extends React.Component {
 
   constructor(){
-    super();        
-    var unsuscribe = base.onAuth(this.authDataCallBack.bind(this));
-    unsuscribe();
-    this.state = {
-      isAuth: false,
-      authUserId: "",
-    };
+    super();    
   }
 
   authHandler(e, u){    
@@ -39,12 +26,6 @@ class Login extends React.Component {
 
   handleLogout(e){
     base.unauth();
-    var unsuscribe = base.onAuth(this.authDataCallBack.bind(this));
-    unsuscribe();
-  }
-
-  authDataCallBack(user){
-    return user ? true : false;
   }
 
   render(){
