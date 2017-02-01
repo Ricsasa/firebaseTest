@@ -1,66 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactRouter from 'react-router';
+import { browserHistory } from 'react-router';
+import { Row, Col, Icon } from 'react-materialize';
 
-import Rebase from 're-base';
+import {firebaseLogin} from '../services/firebaseService';
 
-class Login extends React.Component {
+export default class Login extends React.Component {
 
-  constructor(){
-    super();    
+  constructor() {
+    super();
   }
 
-  authHandler(e, u){    
-    if(e){
-      console.log(e);
-    } else {
-      this.setState({
-        userData: JSON.stringify(u)
+  handleLogin(e) {
+    
+    firebaseLogin()
+      .then((u) => {
+        browserHistory.replace('/');
+      }).catch((e) => {
+        console.log(e);
       });
-    }
   }
 
-  handleLogin(e){
-    base.authWithOAuthPopup('facebook', this.authHandler.bind(this));
-  }
-
-  handleLogout(e){
-    base.unauth();
-  }
-
-  render(){
+  render() {
     return (
-      <div>
-        <nav>      
-          <div className="nav-wrapper">    
-           <a href="#" className="brand-logo">VsFire login proof of concept...</a>   
-          </div>
-        </nav>        
-        <div className="row">
-          <div className="col m12 center-align">            
-              <a className="btn-large" onClick={(e) => this.handleLogin(e)}>Login</a>            
-          </div>
-        </div>
-        <div className="row">
-          <div className="col m6 offset-m3 center-align">            
-              <h3>
-                User Data
-              </h3>      
-              <div className="card-panel">
-                <pre>
-                  {this.state.userData}
-                </pre>
-              </div>      
-          </div>
-          <div className="row">
-            <div className="col m12 center-align">            
-              <a className="btn-large red" onClick={(e) => this.handleLogout(e)}>Logout</a>            
-            </div>
-          </div>
-        </div>
-      </div>
+        <Row>
+          <Col m={12} s={12} className="center-align">
+            <a className="btn-large" onClick={(e) => this.handleLogin(e)}>Login</a>
+          </Col>
+        </Row>
     )
   }
 }
-
-module.exports = Login;

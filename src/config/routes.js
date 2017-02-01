@@ -1,24 +1,28 @@
 import React from 'react';
-import {Router, Route, IndexRoute, browserHistory} from 'react-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import Login from '../containers/Login';
+import App from '../containers/App';
 import Dashboard from '../containers/Dashboard';
+import Test from '../containers/Test';
 import Rebase from 're-base';
-import authStatus from '../services/authService';
+import { firebase } from '../services/firebaseService';
 
-const base = Rebase.createClass({
-    apiKey: "AIzaSyAlZ73daEohcIL5ONW9_PlCNhK2syqf-Nw",
-    authDomain: "logintest-6a46c.firebaseapp.com",
-    databaseURL: "https://logintest-6a46c.firebaseio.com/",
-    //storageBucket: "qwales1-test.appspot.com",
-});
-
-const validateAuth = () => {
-
+const isLoggedIn = (nextState, replace) => {    
+   firebase.onAuth( (user) => {
+       if(user && nextState.location.pathname === '/login') {
+           browserHistory.replace('/');
+       } else if(!user) {
+           browserHistory.replace('/login');
+       }
+   });   
 }
 
-export var routes = (
+export const routes = (
     <Router history={browserHistory}>
-        <Route path='/' component={Login} />
-        <Route path='/dashboard' component={Dashboard} />
+        <Route path='/login' component={Login} onEnter={isLoggedIn} />
+        <Route path='/' component={App} onEnter={isLoggedIn}>
+            <IndexRoute component={Dashboard} />
+            <Route path='test' component={Test} />
+        </Route>
     </Router>
 );
